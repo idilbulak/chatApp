@@ -190,17 +190,31 @@ class GroupController {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function sendMessage(Request $request, Response $response) {
+    public function sendMessage(Request $request, Response $response, $args) {
+        // connect to database
         $db = getDatabaseConnection();
 
+        // get the group_id from uri and check if it is valid, if not return 400:bad request
         $groupId = $args['group_id'];
+        if (!$this->checkGroupExists($groupId)) {
+            return $this->resError($response, 'Invalid group ID', 400);
+        }
 
+        // get the user_id and content from body and check if it valid, if not return 400:bad request
         $data = $request->getParsedBody();
         $userId = $data['user_id'] ?? null;
         $content = $data['content'] ?? null;
+        if (!$userId || !$content) {
+            return $this->resError($response, 'User ID and content are required', 400);
+        }
 
-        $maxContentLength = 1000; // Maksimum karakter sayısı
+        // check if the user is a member of the group, if not return 403:forbidden
+        if (!$this->checkGroupMembership($groupId, $userId)) {
+            return $this->resError($response, 'You are not a member of this group', 403);
+        }
 
+        // bunu middleware a al validation....
+        $maxContentLength = 1000; // max character length for content
         if (strlen($content) > $maxContentLength) {
             $response->getBody()->write(json_encode([
                 'status' => 'error',
@@ -209,14 +223,7 @@ class GroupController {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
-        if (!$groupId || !$userId || !$content) {
-            $response->getBody()->write(json_encode([
-                'status' => 'error',
-                'message' => 'Group ID, User ID and content are required'
-            ]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
-        }
-
+        // insert message to database
         $stmt = $db->prepare('INSERT INTO messages (group_id, user_id, content) VALUES (:group_id, :user_id, :content)');
         $stmt->bindParam(':group_id', $groupId, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
@@ -231,33 +238,71 @@ class GroupController {
 
     }
 
-    public function getAllMessages(Request $request, Response $response, $args) {
+    public function getMessages(Request $request, Response $response, $args) {
+        // connect to database
         $db = getDatabaseConnection();
 
+        // get the group_id from uri and check if it is valid, if not return 400:bad request
         $groupId = $args['group_id'];
-
-        // Grup ID'sini kontrol edin
-        $stmtGroup = $db->prepare('SELECT COUNT(*) as count FROM groups WHERE group_id = :group_id');
-        $stmtGroup->bindParam(':group_id', $groupId, PDO::PARAM_INT);
-        $stmtGroup->execute();
-        $groupCount = $stmtGroup->fetch(PDO::FETCH_OBJ)->count;
-
-        if ($groupCount == 0) {
-            $response->getBody()->write(json_encode([
-                'status' => 'error',
-                'message' => 'Invalid group ID'
-            ]));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        if (!$this->checkGroupExists($groupId)) {
+            return $this->resError($response, 'Invalid group ID', 400);
         }
 
-        // Belirtilen grup için tüm mesajları sıralı bir şekilde al
+        // get the user_id from body and check if it is valid, if not return 400:bad request
+        $data = $request->getParsedBody();
+        $userId = $data['user_id'] ?? null;
+        if (!$userId) {
+            return $this->resError($response, 'User ID is required', 400);
+        }
+
+        // check if the user is a member of the group, if not return 403:forbidden
+        if (!$this->checkGroupMembership($groupId, $userId)) {
+            return $this->resError($response, 'You are not a member of this group', 403);
+        }
+
+        // get all the messages
         $stmt = $db->prepare('SELECT * FROM messages WHERE group_id = :group_id ORDER BY timestamp ASC');
         $stmt->bindParam(':group_id', $groupId, PDO::PARAM_INT);
         $stmt->execute();
         $messages = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        // JSON olarak yanıt dön
+        // return json response
         $response->getBody()->write(json_encode($messages));
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    //  returns true, if the user by {user_id} is a member of group by {group_id}
+    public function checkGroupMembership($groupId, $userId) {
+        $db = getDatabaseConnection();
+
+        $stmt = $db->prepare('SELECT COUNT(*) as count FROM group_members WHERE group_id = :group_id AND user_id = :user_id');
+        $stmt->bindParam(':group_id', $groupId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $membershipCount = $stmt->fetch(PDO::FETCH_OBJ)->count;
+
+        return $membershipCount > 0;
+    }
+
+    //  returns true, if the group by {group_id} exists
+    public function checkGroupExists($groupId) {
+        $db = getDatabaseConnection();
+
+        $stmt = $db->prepare('SELECT COUNT(*) as count FROM groups WHERE group_id = :group_id');
+        $stmt->bindParam(':group_id', $groupId, PDO::PARAM_INT);
+        $stmt->execute();
+        $groupCount = $stmt->fetch(PDO::FETCH_OBJ)->count;
+
+        return $groupCount > 0;
+    }
+
+    // error response
+    public function resError($response, $message, $statusCode) {
+        $response->getBody()->write(json_encode([
+            'status' => 'error',
+            'message' => $message
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($statusCode);
+    }
+
 }
