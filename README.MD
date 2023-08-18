@@ -7,10 +7,10 @@ This project is a chat application backend written in PHP with Slim Framework th
 - Docker and Docker Compose should be installed on your machine.
 
 ## Getting Started
-Build the Project: make
-Start the Project: make up
-Stop the Project: make down
-Rebuild the Project: make re
+Build the Project: make\n
+Start the Project: make up\n
+Stop the Project: make down\n
+Rebuild the Project: make re\n
 Clean Up: make clean
 
 ## Project Overview
@@ -114,5 +114,5 @@ PRIMARY KEY (group_id, user_id): This table uses a composite primary key compose
 - **`timestamp`**: A datetime field that stores the timestamp of when the message was posted. It defaults to the current timestamp.
 
 ## Contact
-Idil BULAK
+Idil BULAK\n
 bulakidil@gmail.com
