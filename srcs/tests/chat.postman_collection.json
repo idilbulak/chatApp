@@ -1,0 +1,806 @@
+{
+	"info": {
+		"_postman_id": "15ab8d7a-2f39-4f76-b7ab-c27e52b78700",
+		"name": "chat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27491434"
+	},
+	"item": [
+		{
+			"name": "createGroup_withUserId&GroupName",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\",\n    \"group_name\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup_withUserId&GroupName",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\",\n    \"group_name\": \"testleave\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup_withUserId&GroupName",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"3\",\n    \"group_name\": \"testdelete\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup_withUserId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup_withGroupName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 400\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - status and message\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string', \"status should be a string\");",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string', \"message should be a string\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"group_name\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup_withEmtyBody",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has required fields - status and message\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.status).to.exist.and.to.be.a('string');",
+							"  pm.expect(responseData.message).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllGroups",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "joinGroup_withUserId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/join",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "joinGroup_withUserId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/2/join",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"2",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "joinGroup_withEmptyBody",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://app:8080/groups/1/join",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "joinGroup_toNonExistingGroup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/100/join",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"100",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "leaveGroup_withUserId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/2/leave",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"2",
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "leaveGroup_admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/2/leave",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"2",
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "leaveGroup_toNonExistingGroup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/100/leave",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"100",
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllGroups",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://app:8080/groups",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendMessage_withUserId&Content",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\",\n    \"content\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getMessages_groupMember",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendMessage_nonGroupMember",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"100\"\n}    \n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getMessages_nonGroupMember",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"100\"\n}    ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendMessage_groupMember",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\",\n    \"content\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendMessage_withLongContent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\",\n    \"content\": \"testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest1\"\n}    ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendMessage_withSpecialCharacters",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"1\",\n    \"content\": \"<script>alert('Hello World!');</script>\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessages_groupMember",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1/messages",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteGroup_nonAdmin",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/1",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteGroup_admin",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://app:8080/groups/3",
+					"protocol": "http",
+					"host": [
+						"app"
+					],
+					"port": "8080",
+					"path": [
+						"groups",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
